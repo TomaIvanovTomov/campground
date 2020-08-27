@@ -14,6 +14,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'v1'], function() {
+    Route::group(['middleware' => 'auth:sanctum'], function(){
+        Route::get('/user', 'UserController@getUser');
+        Route::post('/user/updatePassword', 'UserController@updatePassword');
+    });
+
+    Route::post('/login', 'AuthController@login');
+    Route::post('/register', 'AuthController@register');
+    Route::post('/logout', 'AuthController@logout');
+
+    Route::get("/dashboard", "DashboardController@index");
+
+    Route::get("/countries", "AxiosController@getCountries");
+    Route::get("/states/{id}", "AxiosController@getStates");
+    Route::get("/cities/{id}", "AxiosController@getCities");
+
+    Route::get("/getProperty/{id}", "PropertyController@get");
+    Route::post("/set-information", "PropertyController@saveInformation");
+    Route::post("/set-taxes", "PropertyController@saveTaxes");
+
+    Route::post("/set-site-type", "SiteTypeController@save");
+    Route::post("/edit-site-type", "SiteTypeController@edit");
+    Route::post("/delete-site-type", "SiteTypeController@delete");
+    Route::get("/get-site-types/{property_id}", "SiteTypeController@getAll");
+
+    Route::post("/add-site", "SiteController@save");
+    Route::post("/edit-site", "SiteController@edit");
+    Route::post("/delete-site", "SiteController@delete");
+
+    Route::post("/add-payment", "PaymentPolicyController@create");
 });
