@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {FaChartArea, FaTag, FaBookmark, FaHome, FaBook} from 'react-icons/fa';
 
-import {Content, Item} from './styles';
+import {Content, Item, SubMenus, SubMenu} from './styles';
 
 class Menu extends Component {
     constructor() {
@@ -22,11 +22,21 @@ class Menu extends Component {
                     <h2>Dashboard</h2>
                 </Item>
                 <Item
-                    onClick={() => this.props.menuChange('price')}
-                    selected={this.props.menu == 'price' ? true : false}>
+                    blockHover>
                     <FaTag />
                     <h2>Price and Availability</h2>
                 </Item>
+                <SubMenus>
+                    <SubMenu
+                        onClick={() => this.props.menuChange('calendar')}
+                        selected={this.props.menu == 'calendar' ? true : false}
+                    >Calendar</SubMenu>
+
+                    <SubMenu
+                        onClick={() => this.props.menuChange('rate')}
+                        selected={this.props.menu == 'rate' ? true : false}
+                    >Rate plan</SubMenu>
+                </SubMenus>
                 <Item
                     onClick={() => this.props.menuChange('reservations')}
                     selected={this.props.menu == 'reservations' ? true : false}>

@@ -4,6 +4,7 @@ import {Content, Form} from './styles';
 import message from "../messages";
 import {SanctumContext} from "react-sanctum";
 
+import {toast} from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 
 class Signin extends Component {
@@ -49,10 +50,26 @@ class Signin extends Component {
     }
 
     recover(e) {
-        // handle submit for recover password
-
         e.preventDefault();
         const data = this.state.email;
+        axios.post("/api/v1/recover-password", {
+            email: this.state.email
+        })
+        .then(res => {
+            if (res.data.type === "success") {
+                toast.success(res.data.message)
+                setTimeout(() => {
+                    location.reload()
+                }, 2000)
+            } else {
+                toast.error(res.data.message)
+            }
+        })
+        .catch(err => {
+            toast.error(err.message)
+        })
+
+
     }
 
     render() {

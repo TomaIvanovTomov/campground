@@ -23,6 +23,7 @@ Route::group(['prefix' => 'v1'], function() {
     Route::post('/login', 'AuthController@login');
     Route::post('/register', 'AuthController@register');
     Route::post('/logout', 'AuthController@logout');
+    Route::post('/recover-password', 'AuthController@recover');
 
     Route::get("/dashboard", "DashboardController@index");
 
@@ -38,6 +39,10 @@ Route::group(['prefix' => 'v1'], function() {
     Route::post("/edit-site-type", "SiteTypeController@edit");
     Route::post("/delete-site-type", "SiteTypeController@delete");
     Route::get("/get-site-types/{property_id}", "SiteTypeController@getAll");
+
+    Route::post("/search-reservations", "ReservationController@searchReservation");
+
+    Route::post("/search-accountings", "AccountingController@searchAccounting");
 
     Route::post("/add-site", "SiteController@save");
     Route::post("/edit-site", "SiteController@edit");

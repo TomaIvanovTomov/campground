@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TestMail;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -83,6 +86,48 @@ class AuthController extends Controller
             'region' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:15'],
             'password' => ['required', 'string', 'min:6'],
+        ]);
+    }
+
+    public function recover(Request $request)
+    {
+        $validator = $this->validateEmail($request->all());
+        if ($validator->fails()) {
+            return response()->json([
+               'message' => $validator->errors()
+            ]);
+        }
+
+        $details = [
+            'title' => "my title",
+            'body' => 'this is body'
+        ];
+
+        $details['new_pass'] = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
+        Mail::to($request->all()['email'])->send(new TestMail($details));
+
+        if (!Mail::failures()) {
+
+            User::where("email", $request->all()['email'])->update([
+                "password" => Hash::make($details['new_pass'])
+            ]);
+
+            return response()->json([
+                'message' => 'Check your email for your new password.',
+                'type' => 'success',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Something went wrong. Please, try again.',
+                'type' => 'error'
+            ]);
+        }
+    }
+
+    public function validateEmail($data)
+    {
+        return Validator::make($data, [
+            'email' => ['required', 'email']
         ]);
     }
 

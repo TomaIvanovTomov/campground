@@ -19,6 +19,7 @@ class Table extends Component {
     }
 
     render() {
+        console.log("PROPS", this.props)
         return(
             <Content>
                 <table>
@@ -32,7 +33,7 @@ class Table extends Component {
                         <th>Commision (USD)</th>
                         <th>Status</th>
                     </tr>
-                    
+
                     {this.props.data.map(reservation => (
                         <tr onClick={() => this.openReservation(reservation.id)}>
                             <td><h2>{reservation.traveler}</h2><p>{reservation.id}</p></td>
@@ -43,21 +44,21 @@ class Table extends Component {
                             <td>{reservation.price}</td>
                             <td>{reservation.commision}</td>
                             <td>
-                                {reservation.status == 1 &&
+                                {reservation.status == 'confirmed' &&
                                     <Confirmed>Confirmed</Confirmed>
                                 }
 
-                                {reservation.status == 2 &&
+                                {reservation.status == 'cancelled' &&
                                     <Cancelled>Cancelled</Cancelled>
                                 }
 
-                                {reservation.status == 3 &&
+                                {reservation.status == 'expired' &&
                                     <Expired>Expired</Expired>
                                 }
                             </td>
                         </tr>
                     ))}
-                </table>                
+                </table>
             </Content>
         )
     }

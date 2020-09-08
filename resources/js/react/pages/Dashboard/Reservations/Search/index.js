@@ -9,6 +9,7 @@ import selectStyles from '../selectStyles';
 import {FaSearch, FaCalendarAlt} from 'react-icons/fa';
 
 import {Content, Block, Section, Button} from './styles';
+import {toast} from "react-toastify";
 
 class Search extends Component {
     constructor() {
@@ -99,16 +100,16 @@ class Search extends Component {
                     <Section>
                         <FaCalendarAlt />
                         <p>
-                            {                            
+                            {
                                 this.state.startDate
-                                ? this.state.startDate.toLocaleDateString('en-US')
-                                : null
+                                    ? this.state.startDate.toLocaleDateString('en-US')
+                                    : null
                             }
 
-                            {                            
+                            {
                                 this.state.endDate
-                                ? ` - ${this.state.endDate.toLocaleDateString('en-US')}`
-                                : null
+                                    ? ` - ${this.state.endDate.toLocaleDateString('en-US')}`
+                                    : null
                             }
                         </p>
                         <DatePicker

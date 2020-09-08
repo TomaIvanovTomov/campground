@@ -67,7 +67,15 @@ class Accounting extends Component {
     }
 
     searchSubmit(data) {
-        // call to update reservations data
+        axios.post("/api/v1/search-accountings", {
+            data: data
+        })
+            .then(response => {
+                this.setState({invoices: response.data})
+            })
+            .catch(response => {
+                toast.error(response.data.message)
+            })
     }
 
     componentWillMount() {
@@ -78,7 +86,7 @@ class Accounting extends Component {
         return(
             <Content>
                 <h1>Accounting</h1>
-            
+
                 <Search searchSubmit={(data) => this.searchSubmit(data)} />
 
                 <Info>
@@ -89,7 +97,7 @@ class Accounting extends Component {
                             <FaPrint />
                             <p>Print List</p>
                         </section>
-                        
+
                         <section>
                             <FaFileDownload />
                             <p>Download List</p>

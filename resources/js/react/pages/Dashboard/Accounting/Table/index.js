@@ -22,26 +22,26 @@ class Table extends Component {
                         <th>Amount (USD)</th>
                         <th>Status</th>
                     </tr>
-                    
+
                     {this.props.data.map(invoice => (
-                        <tr onClick={() => this.openinvoice(invoice.id)}>
-                            <td><h2>{invoice.traveler}</h2><p>{invoice.id}</p></td>
+                        <tr>
+                            <td><h2>{invoice.invoice}</h2></td>
                             <td>{invoice.period}</td>
                             <td>{invoice.issueDate}</td>
                             <td>{invoice.dueDate}</td>
                             <td>{invoice.amount}</td>
                             <td>
-                                {invoice.status == 1 &&
+                                {invoice.status == "paid" &&
                                     <Confirmed>Paid</Confirmed>
                                 }
 
-                                {invoice.status == 2 &&
+                                {invoice.status == "unpaid" &&
                                     <Cancelled>Unpaid</Cancelled>
                                 }
                             </td>
                         </tr>
                     ))}
-                </table>                
+                </table>
             </Content>
         )
     }
