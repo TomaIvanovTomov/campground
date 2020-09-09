@@ -41,7 +41,9 @@ Route::group(['prefix' => 'v1'], function() {
     Route::get("/get-site-types/{property_id}", "SiteTypeController@getAll");
 
     Route::post("/search-reservations", "ReservationController@searchReservation");
+    Route::get("/get-reservations", "ReservationController@getReservations");
 
+    Route::get("/get-accountings", "AccountingController@getAccountings");
     Route::post("/search-accountings", "AccountingController@searchAccounting");
 
     Route::post("/add-site", "SiteController@save");

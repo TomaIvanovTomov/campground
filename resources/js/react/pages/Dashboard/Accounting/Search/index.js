@@ -79,15 +79,15 @@ class Search extends Component {
         return(
             <Content>
                 <Block>
-                    <h1>SEARCH BY KEYWORDS</h1>
+                    <h1>SEARCH BY INVOICE</h1>
                     <Section>
                         <FaSearch />
                         <input
                             onChange={e => this.setState({keyword: e.target.value})}
-                            placeholder='Eg. travellor name/booking ID'
+                            placeholder='Invoice number'
                         />
                     </Section>
-                </Block>                
+                </Block>
                 <Block>
                     <h1>STATUS</h1>
                     <Section selection>
@@ -100,7 +100,7 @@ class Search extends Component {
                         />
                     </Section>
                 </Block>
-                <Block>
+                {/*<Block>
                     <h1>YEAR</h1>
                     <Section selection>
                         <Select
@@ -111,7 +111,7 @@ class Search extends Component {
                             isMulti
                         />
                     </Section>
-                </Block>
+                </Block>*/}
                 <Button onClick={() => this.applySearch()}>APPLY</Button>
             </Content>
         )

@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {FaPrint, FaFileDownload} from 'react-icons/fa';
 
 import {Content, Info, Pagination, Page} from './styles';
+import {toast} from "react-toastify";
 
 import Table from './Table';
 import Search from './Search';
@@ -19,51 +20,14 @@ class Accounting extends Component {
         this.searchSubmit = this.searchSubmit.bind(this);
     }
 
-    loadInvoices() {
-        const data = [
-            {
-                id: 'ASDF23423',
-                period: 'Deluxe',
-                issueDate: '20 Oct - 23 Oct 2020',
-                dueDate: '18 Oct 2020',
-                amount: 325,
-                status: 1
-            },
-            {
-                id: '3434KJ3K3',
-                period: 'Deluxe',
-                issueDate: '20 Oct - 23 Oct 2020',
-                dueDate: '18 Oct 2020',
-                amount: 183,
-                status: 2
-            },
-            {
-                id: '0D8RF8F8F2',
-                period: 'Deluxe',
-                issueDate: '20 Oct - 23 Oct 2020',
-                dueDate: '18 Oct 2020',
-                amount: 280,
-                status: 2
-            },
-            {
-                id: '1231231232',
-                period: 'Deluxe',
-                issueDate: '20 Oct - 23 Oct 2020',
-                dueDate: '18 Oct 2020',
-                amount: 280,
-                status: 1
-            },
-            {
-                id: '223K42322DD',
-                period: 'Deluxe',
-                issueDate: '20 Oct - 23 Oct 2020',
-                dueDate: '18 Oct 2020',
-                amount: 280,
-                status: 2
-            }
-        ];
-
-        this.setState({invoices: data});
+    async loadInvoices() {
+        await axios.get("/api/v1/get-accountings")
+        .then((response) => {
+            this.setState({invoices: response.data});
+        })
+        .catch((err) => {
+            toast.message(err)
+        })
     }
 
     searchSubmit(data) {

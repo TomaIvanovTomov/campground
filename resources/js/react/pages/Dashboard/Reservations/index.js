@@ -22,42 +22,14 @@ class Reservations extends Component {
         this.searchSubmit = this.searchSubmit.bind(this);
     }
 
-    loadReservations() {
-        const data = [
-            {
-                traveler: 'Adam West',
-                id: '31728A671',
-                site: 'Deluxe',
-                reservationDate: '20 Oct - 23 Oct 2020',
-                bookingDate: '18 Oct 2020',
-                guests: 3,
-                price: 230,
-                commision: 30,
-                status: 1
-            },
-            {
-                traveler: 'John Doe',
-                id: '31728A671',
-                site: 'Deluxe',
-                reservationDate: '20 Oct - 23 Oct 2020',
-                bookingDate: '18 Oct 2020',
-                guests: 4,
-                price: 280,
-                commision: 80,
-                status: 2
-            },
-            {
-                traveler: 'Camila White',
-                id: '31728A671',
-                site: 'Deluxe',
-                reservationDate: '20 Oct - 23 Oct 2020',
-                bookingDate: '18 Oct 2020',
-                guests: 1,
-                price: 180,
-                commision: 20,
-                status: 3
-            }
-        ];
+    async loadReservations() {
+        await axios.get("/api/v1/get-reservations")
+        .then((response) => {
+            this.setState({reservations: response.data});
+        })
+        .catch((err) => {
+            toast.message(err)
+        })
 
         this.setState({reservations: data});
     }
