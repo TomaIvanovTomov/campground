@@ -70,21 +70,7 @@ class Property extends Component {
         }
 
         if (this.state.step == 2) {
-            const info = {
-                sales: data.sales,
-                country: data.country,
-                state: data.state,
-                other: data.other
-            };
-
-            /*if (
-                !info.sales.percent && !info.sales.fix ||
-                !info.country.percent && !info.country.fix ||
-                !info.state.percent && !info.state.fix
-            ) {
-                toast.error('Please fill all the required tax info.');
-                return;
-            }*/
+            const taxes = data.taxes;
         }
 
         if (this.state.step == 4) {

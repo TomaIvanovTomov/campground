@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Property;
+use App\PropertyTax;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -55,40 +56,21 @@ class PropertyController extends Controller
 
     public function saveTaxes(Request $request)
     {
-        $validator = $this->validateTaxes($request->all());
-        if ($validator->fails()) {
-            response()->json([
-                "message" => json_encode($validator->errors())
-            ]);
+        $taxes = $request->all()['taxes'];
+
+        if ($taxes) {
+            foreach ($taxes as $tax) {
+                PropertyTax::create([
+                    "property_id" => $request->all()['property'],
+                    "name" => $tax['name'],
+                    'price' => $tax['value']
+                ]);
+            }
         }
-        Property::where("id", $request->property_id)->update([
-            'sales_tax_percentage' => $request->sales_tax_percentage,
-            'sales_tax' => $request->sales_tax,
-            'country_tax_percentage' => $request->country_tax_percentage,
-            'country_tax' => $request->country_tax,
-            'other_tax_percentage' => $request->other_tax_percentage,
-            'other_tax' => $request->other_tax,
-            'state_tax_percentage' => $request->state_tax_percentage,
-            'state_tax' => $request->state_tax,
-        ]);
+
         return response()->json([
             'message' => "Property updated successfully."
         ], 200);
-    }
-
-    protected function validateTaxes(array $data)
-    {
-        return Validator::make($data, [
-            'property_id' => ['required'],
-            'sales_tax_percentage' => ['integer'],
-            'sales_tax' => ['numeric'],
-            'country_tax_percentage' => ['integer'],
-            'country_tax' => ['numeric'],
-            'other_tax_percentage' => ['integer'],
-            'other_tax' => ['numeric'],
-            'state_tax_percentage' => ['integer'],
-            'state_tax' => ['numeric'],
-        ]);
     }
 
     public function get($id)

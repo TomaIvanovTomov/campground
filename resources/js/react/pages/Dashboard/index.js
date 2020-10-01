@@ -27,9 +27,9 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        /*if (!this.context.authenticated) {
+        if (!this.context.authenticated) {
             this.props.history.push("/")
-        }*/
+        }
     }
 
     render() {

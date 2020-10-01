@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-
+import Switch from 'react-switch';
 import {toast} from 'react-toastify';
 
-import {Content, Form, Items, Site, Header, Body, Info, Buttons, SitesList, SiteItem, Controls, Span} from './styles';
+import {Content, Form, Items, Site, Header, Body, Info, Buttons, SitesList, SiteItem, Controls, Span, AddSitesPop, NewSiteInput} from './styles';
 
 import Edit from './Edit';
 import EditSite from './EditSite';
@@ -21,6 +21,18 @@ class Sites extends Component {
             edit: false,
             editSite: false,
             addSites: false,
+            newSitesNames: [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
             numberOfNewSites: null,
             new: false,
             sites: [],
@@ -37,15 +49,16 @@ class Sites extends Component {
         this.editSite = this.editSite.bind(this);
         this.deleteSiteType = this.deleteSiteType.bind(this);
         this.deleteSite = this.deleteSite.bind(this);
+        this.setSiteNames = this.setSiteNames.bind(this);
     }
 
     async loadSites() {
-        /*await axios.get("/api/v1/get-site-types/"+this.context.property).then(response => {
-            this.setState({sites: response.data});
-        })*/
-        await axios.get("/api/v1/get-site-types/12").then(response => {
+        await axios.get("/api/v1/get-site-types/"+this.context.property).then(response => {
             this.setState({sites: response.data});
         })
+        /*await axios.get("/api/v1/get-site-types/12").then(response => {
+            this.setState({sites: response.data});
+        })*/
     }
 
     addSiteType(data) {
@@ -53,24 +66,41 @@ class Sites extends Component {
 
         sites.push(data);
 
-        // call to add site on database
-
         this.setState({sites: sites, new: false});
+    }
+
+    setSiteNames(value, index) {
+        const sitesNames = this.state.newSitesNames;
+
+        sitesNames[index] = value;
+
+        this.setState({newSitesNames: sitesNames});
+    }
+
+    activateSite(prevStatus, id) {
+        let active = prevStatus == null ? 1 : null;
+        axios.post("/api/v1/update-status", {
+            id: id,
+            status: active
+        })
+        .catch((err) => {
+            toast.message(err)
+        })
     }
 
     addSites() {
         const Newsites = [];
 
-        for (let i = 1; i <= this.state.numberOfNewSites; i++) {
+        for (let i = 0; i < this.state.numberOfNewSites; i++) {
             let site = {
-                name: `New site ${i}`
+                name: this.state.newSitesNames[i]
             }
 
             Newsites.push(site);
         }
 
         axios.post("/api/v1/add-site", {
-            site_id: this.state.siteId,
+            site_id: this.state.site.id,
             sites: JSON.stringify(Newsites),
             count: this.state.numberOfNewSites
         })
@@ -127,8 +157,6 @@ class Sites extends Component {
 
         sites[typeIndex].sites[itemIndex] = data;
 
-        // call to edit site on database
-
         this.setState({sites: sites, editSite: false});
     }
 
@@ -173,7 +201,6 @@ class Sites extends Component {
 
     submit(e) {
         e.preventDefault();
-        console.log("SITE", this.context)
         if (this.state.sites.length == 0) {
             toast.error('Please add at least one site type.');
             return;
@@ -190,6 +217,48 @@ class Sites extends Component {
         let hasSites = this.state.sites.length > 0
         return(
             <Content>
+                {this.state.addSites &&
+                <>
+                    <AddSitesPop display="true">
+                        <h2>Add new site(s)</h2>
+
+                        <p>Please select how many sites would you like to add</p>
+
+                        <select onChange={(e) => this.setState({numberOfNewSites: e.target.value})}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+
+                        {this.state.numberOfNewSites &&
+                        <>
+                            <p>What would be the name of the sites?</p>
+
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 0)} display={1 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 1)} display={2 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 2)} display={3 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 3)} display={4 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 4)} display={5 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 5)} display={6 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 6)} display={7 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 7)} display={8 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 8)} display={9 <= this.state.numberOfNewSites ? true : false} />
+                            <NewSiteInput type="text" onChange={(e) => this.setSiteNames(e.target.value, 9)} display={10 <= this.state.numberOfNewSites ? true : false} />
+
+                            <button onClick={() => this.addSites()}>Submit</button>
+                        </>
+                        }
+                    </AddSitesPop>
+                </>
+                }
+
                 {!this.state.edit && !this.state.new && !this.state.editSite &&
                     <Form>
                         <button onClick={() => this.setState({new: true})}>New site type</button>
@@ -226,6 +295,7 @@ class Sites extends Component {
                                             {site.sites.map((item, itemIndex) => (
                                                 <SiteItem>
                                                     <h2>{item.name}</h2>
+                                                    <Switch checked={item.active} onChange={() => this.activateSite(item.active,item.id)}/>
                                                     <p onClick={() => this.setState({editSite: true, site: site, index: index, siteIndex: itemIndex})}>Edit</p>
                                                     <p onClick={() => this.deleteSite(index, itemIndex)}>Delete</p>
                                                 </SiteItem>

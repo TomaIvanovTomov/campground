@@ -24,7 +24,6 @@ class Signup extends Component {
             repeatPassword: null,
             continue: false
         }
-        console.log("History", this.props.history)
         this.submit = this.submit.bind(this);
         this.continue = this.continue.bind(this);
     }
@@ -54,7 +53,6 @@ class Signup extends Component {
                     if (response.status === 200) {
                         if (response.data.user) {
                             this.context.setUser(response.data.user);
-                            console.log("USER", this.context.user)
                             this.props.history.push('/dashboard');
                         }
                     }

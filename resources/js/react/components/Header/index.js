@@ -4,9 +4,13 @@ import {FaChevronDown} from 'react-icons/fa';
 import {Content, Menu, User} from './styles';
 
 import Logo from '../../assets/logo.png';
-import Profile from '../../assets/profile.jpg';
+import Profile from '../../assets/default.png';
+import {SanctumContext} from "react-sanctum";
 
 class Header extends Component {
+
+    static contextType = SanctumContext;
+
     constructor() {
         super();
 
@@ -31,7 +35,7 @@ class Header extends Component {
                 {this.props.internal &&
                 <User>
                     <img src={Profile} />
-                    <p>Ryan Monique</p>
+                    <p>{this.context.user.first_name} {this.context.user.last_name}</p>
                     <FaChevronDown />
                 </User>
                 }

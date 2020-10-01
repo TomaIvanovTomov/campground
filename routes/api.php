@@ -46,6 +46,7 @@ Route::group(['prefix' => 'v1'], function() {
     Route::get("/get-accountings", "AccountingController@getAccountings");
     Route::post("/search-accountings", "AccountingController@searchAccounting");
 
+    Route::post("/update-status", "SiteController@updateStatus");
     Route::post("/add-site", "SiteController@save");
     Route::post("/edit-site", "SiteController@edit");
     Route::post("/delete-site", "SiteController@delete");

@@ -2,6 +2,7 @@ import styled, {css} from 'styled-components';
 
 export const Content = styled.div`
     width: 100%;
+    position: relative;
 `;
 
 export const Form = styled.div`
@@ -171,12 +172,12 @@ export const Controls = styled.div`
     justify-content: flex-end;
     width: 100%;
     color: var(--primary);
-    float: right; 
+    float: right;
 
     button {
         width: 25%;
         margin: 0;
-        background-color: var(--secondary);        
+        background-color: var(--secondary);
         border-radius: 8px;
         border: none;
         padding: 20px;
@@ -198,4 +199,70 @@ export const Span = styled.span`
         opacity: 0.7;
     `}
 `;
+
+export const AddSitesPop = styled.div`
+    position: absolute;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    z-index: 2000;
+    top: 50%;
+    left: 50%;
+    padding: 40px;
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
+
+    h2 {
+        font-weight: 200;
+        font-size: 34px;
+        color: #505050;
+    }
+
+    p {
+        font-weight: 800;
+        color: #4a4a4a;
+        font-size: 17px;
+        margin: 10px auto;
+    }
+
+    select {
+        width: 100%;
+        border: 1px solid #4a4a4a;
+        height: 50px;
+        margin-bottom: 10px;
+        color: #2d364c;
+        font-weight: 800;
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    button {
+        background-color: var(--secondary);
+        font-weight: 800;
+        font-size: 20px;
+        padding: 20px;
+        border: none;
+        color: white;
+        width: 100%;
+    }
+`;
+
+export const NewSiteInput = styled.input`
+    width: 100%;
+    border: 1px solid #4a4a4a;
+    height: 50px;
+    margin-bottom: 10px;
+    color: #2d364c;
+    font-weight: 800;
+    font-size: 18px;
+    padding: 10px;
+    display: none;
+
+    ${props => props.display && css`
+        display: block !important;
+    `}
+`;
+
 

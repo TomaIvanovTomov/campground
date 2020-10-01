@@ -116,6 +116,7 @@ class SiteTypeController extends Controller
                     'state_tax as stateTax',
                     'country_tax as countryTax',
                     'max_occupancy as sitePax',
+                    'active'
                 ])
                 ->where("site_id", $type->id)->get();
             }

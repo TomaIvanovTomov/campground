@@ -146,7 +146,7 @@ export const Info = styled.div`
                 color: #35a2ff !important;
             }
 
-            p {                
+            p {
                 color: #35a2ff !important;
             }
         }
@@ -166,7 +166,7 @@ export const PropertyInfo = styled.section`
         flex-direction: column;
         width: unset !important;
         margin: 0 30px 0 0;
-        
+
         p {
             color: var(--secondary) !important;
         }
@@ -174,6 +174,23 @@ export const PropertyInfo = styled.section`
 `;
 
 export const SidebarHeader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 0 20px 0;
+
+    button {
+        background-color: var(--secondary);
+        border: none;
+        color: white;
+        text-transform: uppercase;
+        font-size: 13px;
+        padding: 15px 25px;
+    }
+`;
+
+export const ContentHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
-
 import {FaPhone, FaEnvelope, FaMapMarkerAlt} from 'react-icons/fa';
-
-import {Content, Main, MainProperty, MainSidebar, PropertyContent, PropertyHeader, PropertyContact, SidebarHeader} from './styles';
-
+import { withRouter } from 'react-router-dom';
+import {Content, ContentHeader, Main, MainProperty, MainSidebar, PropertyContent, PropertyHeader, PropertyContact, SidebarHeader} from './styles';
 import Policies from './Policies';
 import Site from './Site';
-
 import Stars from '../../../components/Stars';
-
 import SiteImg from '../../../assets/site.jpg';
+import {SanctumContext} from "react-sanctum";
+import {toast} from 'react-toastify';
 
 class Property extends Component {
-    constructor() {
-        super();
+
+    static contextType = SanctumContext;
+
+    constructor(props) {
+        super(props);
 
         this.state = {
             property: []
@@ -23,6 +24,13 @@ class Property extends Component {
     }
 
     loadProperty() {
+        /*axios.get("/api/v1/get-properties/"+this.context.user.id)
+            .then((response) => {
+                this.setState({property: response.data});
+            })
+            .catch((err) => {
+                toast.message(err)
+            })*/
         const data = {
             name: 'GrandStand RV Park',
             address: '3082 Speedway Blvd, Lincoln, AL 35096, United States',
@@ -82,10 +90,13 @@ class Property extends Component {
     }
 
     render() {
+        console.log("HIST", this.props)
         return(
             <Content>
-                <h1>Property Management</h1>
-
+                <ContentHeader>
+                    <h1>Property Management</h1>
+                    <button onClick={() => {this.props.history.push("/property")}}>Add new property</button>
+                </ContentHeader>
                 <Main>
 
                   <MainProperty>
@@ -102,7 +113,7 @@ class Property extends Component {
                         </section>
                       </PropertyHeader>
 
-                      <img src={SiteImg} />  
+                      <img src={SiteImg} />
 
                       <PropertyContact>
                         <section>
@@ -113,13 +124,13 @@ class Property extends Component {
                           <FaEnvelope />
                           <p>{this.state.property.email}</p>
                         </section>
-                      </PropertyContact>    
+                      </PropertyContact>
 
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nunc arcu, ultrices a est ac, lacinia suscipit mi. Suspendisse ultrices magna et tellus consequat, tempor viverra felis fringilla. Donec efficitur commodo maximus. Nunc posuere mauris ante, in cursus tellus pretium rutrum. Donec lobortis augue non sem sagittis sagittis at sit amet mi. Cras metus dolor, hendrerit non nunc molestie, laoreet semper justo. Quisque sed ullamcorper magna.</p>           
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nunc arcu, ultrices a est ac, lacinia suscipit mi. Suspendisse ultrices magna et tellus consequat, tempor viverra felis fringilla. Donec efficitur commodo maximus. Nunc posuere mauris ante, in cursus tellus pretium rutrum. Donec lobortis augue non sem sagittis sagittis at sit amet mi. Cras metus dolor, hendrerit non nunc molestie, laoreet semper justo. Quisque sed ullamcorper magna.</p>
                       </PropertyContent>
 
                       <PropertyContent>
-                      <Policies policies={this.state.property.policies} />                  
+                      <Policies policies={this.state.property.policies} />
                     </PropertyContent>
                   </MainProperty>
 
@@ -142,4 +153,4 @@ class Property extends Component {
     }
 }
 
-export default Property;
+export default withRouter(Property);

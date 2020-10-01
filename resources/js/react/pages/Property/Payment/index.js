@@ -3,7 +3,7 @@ import InputMask from 'react-input-mask';
 import Select from 'react-select';
 
 import selectStyles from '../../../styles/selectInputStyles';
-
+import { withRouter } from 'react-router-dom';
 import {toast} from 'react-toastify';
 
 import {Content, Half, Form, HalfInput, Checkbox, Controls, Span} from './styles';
@@ -54,7 +54,8 @@ class Payment extends Component {
         .then(response => {
             if (response.data.type === "success") {
                 toast.success(response.data.message)
-                this.props.nextStep(this.state);
+                this.props.nextStep(this.state);4
+                this.props.history.push("/dashboard")
             }
         })
         .catch(err => {
@@ -158,4 +159,4 @@ class Payment extends Component {
     }
 }
 
-export default Payment;
+export default withRouter(Payment);

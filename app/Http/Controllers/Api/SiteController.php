@@ -114,4 +114,9 @@ class SiteController extends Controller
             'sites' => ['required']
         ]);
     }
+
+    public function updateStatus(Request $request)
+    {
+        return Site::where("id", $request->all()['id'])->update(["active" => $request->all()['status']]);
+    }
 }

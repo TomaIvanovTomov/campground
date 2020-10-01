@@ -73,12 +73,12 @@ class Accounting extends Component {
                     data={this.state.invoices}
                 />
 
-                <Pagination>
+                {/*<Pagination>
                     <Page active>1</Page>
                     <Page>2</Page>
                     <Page>3</Page>
                     <Page>4</Page>
-                </Pagination>
+                </Pagination>*/}
             </Content>
         )
     }

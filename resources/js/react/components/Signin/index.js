@@ -40,8 +40,8 @@ class Signin extends Component {
                     }
                 })
                 .catch(err => {
-                    if(err.response.status === 422){
-                        message('error', 'Wrong password or email.');
+                    if(err.response.status === 401){
+                        message('error', 'Invalid email or password.');
                     }
                 });
         })
