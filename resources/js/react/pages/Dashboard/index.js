@@ -1,71 +1,138 @@
 import React, {Component} from 'react';
 
-import {Content} from './styles';
+import {Content, Header, Info, InfoSection} from './styles';
 
-import Header from '../../components/Header';
-import Menu from './Menu';
+import Select from 'react-select'
+import selectStyles from './selectInputStyles';
 
-import Board from './Board';
-import Reservations from './Reservations';
-import Accounting from './Accounting';
-import Property from './Property';
-import Calendar from './Calendar';
-import Rate from './Rate';
+import InputMask from 'react-input-mask';
 
+import PageHeader from '../../components/Header';
+import PageFooter from '../../components/Footer';
 import {SanctumContext} from "react-sanctum";
+import {toast} from "react-toastify";
 
 class Dashboard extends Component {
 
     static contextType = SanctumContext;
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
-            menu: 'dashboard'
+            id: null,
+            old_password: null,
+            new_password: null,
+            first_name: null,
+            last_name: null,
+            region: null,
+            phone: null,
         }
+
+        this.submit = this.submit.bind(this)
+    }
+
+    submit(e) {
+        e.preventDefault()
+        console.log(this.state)
+        console.log(this.context)
+        axios.post("/api/v1/update-user", {
+            id: this.context.user.id,
+            user: this.state
+        })
+        .then(response => {
+            const user = response.data.user
+            toast.success(response.data.message)
+            if (user) {
+                this.setState({
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    phone: user.phone,
+                    region: user.region
+                })
+            }
+        })
     }
 
     componentDidMount() {
-        if (!this.context.authenticated) {
-            this.props.history.push("/")
-        }
+        this.setState({
+            first_name: this.context.user.first_name,
+            last_name: this.context.user.last_name,
+            phone: this.context.user.phone,
+            region: this.context.user.region,
+            id: this.context.user.id,
+        })
     }
 
     render() {
         return(
             <>
-            <Header internal />
+            <PageHeader internal />
+
             <Content>
-                <Menu
-                    menu={this.state.menu}
-                    menuChange={(e) => this.setState({menu: e})}
-                />
+                <Header>
+                    <p>Settings</p>
+                    <h2>My Account</h2>
+                </Header>
 
-                {this.state.menu == 'dashboard' &&
-                    <Board changeMenu={(e) => this.setState({menu: e})} />
-                }
+                <Info>
+                    <form onSubmit={(e) => {this.submit(e)}}>
+                        <InfoSection>
+                            <section>
+                                <section>
+                                    <p>E-mail</p>
+                                    <h2>{this.context.user.email}</h2>
+                                </section>
 
-                {this.state.menu == 'calendar' &&
-                    <Calendar />
-                }
+                                <section>
+                                    <p>Old password</p>
+                                    <input type="password" onChange={(e) => this.setState({old_password: e.target.value})}/>
+                                </section>
 
-                {this.state.menu == 'rate' &&
-                    <Rate />
-                }
+                                <section>
+                                    <p>New password</p>
+                                    <input type="password" onChange={(e) => this.setState({new_password: e.target.value})}/>
+                                </section>
+                            </section>
+                        </InfoSection>
 
-                {this.state.menu == 'reservations' &&
-                    <Reservations />
-                }
+                        <InfoSection>
+                            <h2>Profile</h2>
 
-                {this.state.menu == 'accounting' &&
-                    <Accounting />
-                }
+                            <section>
+                                <section>
+                                    <p>First Name*</p>
+                                    <input type="text" value={this.state.first_name} onChange={(e) => this.setState({first_name: e.target.value})} />
+                                </section>
 
-                {this.state.menu == 'property' &&
-                    <Property />
-                }
+                                <section>
+                                    <p>Last Name*</p>
+                                    <input type="text" value={this.state.last_name} onChange={(e) => this.setState({last_name: e.target.value})} />
+                                </section>
+
+                                <section>
+                                    <p>Region*</p>
+                                    <input type="text" value={this.state.region} onChange={(e) => this.setState({region: e.target.value})} />
+                                </section>
+
+                                <section>
+                                    <p>Mobile*</p>
+                                    <InputMask
+                                        required mask="+999 99 999 99"
+                                        value={this.state.phone}
+                                        alwaysShowMask
+                                        onChange={(e) => this.setState({phone: e.target.value})}
+                                        maskChar="_"
+                                    />
+                                </section>
+                            </section>
+                        </InfoSection>
+
+                        <button type="submit">Save details</button>
+                    </form>
+                </Info>
             </Content>
+            <PageFooter />
             </>
         )
     }

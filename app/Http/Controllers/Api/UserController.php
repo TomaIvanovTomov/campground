@@ -40,4 +40,28 @@ class UserController extends Controller
             'newPassword' => ['required', 'string', 'min:6']
         ]);
     }
+
+    public function updateUser(Request $request)
+    {
+        $data = $request->all()['user'];
+        $user = User::find($data['id']);
+        if (Hash::check($data['old_password'], $user->password)) {
+            $user->password = Hash::make($data['new_password']);
+            $user->first_name = $data['first_name'];
+            $user->last_name = $data['last_name'];
+            $user->phone = $data['phone'];
+            $user->region = $data['region'];
+            $user->save();
+            return json_encode([
+                'user' => $user,
+                'message' => "Data updated successfully!"
+            ]);
+        } else {
+            return json_encode([
+                'user' => "",
+                'message' => "Data updated successfully!"
+            ]);
+        }
+    }
+
 }

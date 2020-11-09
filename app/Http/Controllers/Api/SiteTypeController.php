@@ -52,7 +52,7 @@ class SiteTypeController extends Controller
             'pax' => $data['pax']
         ])) {
             $siteType = SiteType::select(["id", "title", "pax", "price", "rv"])->where("id", $data['id'])->get();
-            $siteType->sites = Site::where("site_id", $data['id'])->get();
+            $siteType->sites = Site::where("site_type_id", $data['id'])->get();
             return response()->json([
                 'message' => "Site type successfully updated",
                 'type' => 'success',
@@ -118,9 +118,45 @@ class SiteTypeController extends Controller
                     'max_occupancy as sitePax',
                     'active'
                 ])
-                ->where("site_id", $type->id)->get();
+                ->where("site_type_id", $type->id)->get();
             }
         }
         return response()->json($types);
+    }
+
+    public function listCalendarTypes($property_id)
+    {
+        $types = SiteType::where("property_id", $property_id)->get();
+        $result = [];
+        if ($types) {
+            foreach ($types as $k => $type) {
+
+                $result[$k]['name'] = $type->title;
+
+                if ($children = $type->childrenSites) {
+
+                    $site_status = [];
+                    $site_allotment = [];
+
+                    foreach ($children as $site) {
+                        $site_status[] = is_null($site->active) ? 2 :1;
+                        $site_allotment[] = $site->max_occupancy ?? 1;
+                    }
+
+                    $result[$k]['data'][] = [
+                        'title' => 'Sites Status',
+                        'icons' => true,
+                        'values' => $site_status
+                    ];
+
+                    $result[$k]['data'][] = [
+                        'title' => 'Sites Allotment',
+                        'values' => $site_allotment
+                    ];
+                }
+            }
+        }
+
+        return $result;
     }
 }

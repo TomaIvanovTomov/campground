@@ -1,156 +1,134 @@
 import React, {Component} from 'react';
 
-import {Content} from './styles';
+import {Content, Header, HeaderInfo, HeaderDistance, Info, PropertyContent, Sidebar, PropertyInfoHeader, PropertyInfoHeaderTitle} from './styles';
 
-import {toast} from 'react-toastify';
+import Pictures from './Pictures';
+import Description from './Description';
+import SiteType from './SiteType';
+import Policies from './Policies';
+import BookInfo from './BookInfo';
+import Map from './Map';
 
-import Steps from './Steps';
+import BackButtom from '../../components/BackButtom';
+import Stars from '../../components/Stars';
+import PageHeader from '../../components/Header';
+import PageFooter from '../../components/Footer';
 
-import PropertyInformation from './Information';
-import Taxes from './Taxes';
-import Sites from './Sites';
-import Payment from './Payment';
+import BookModal from '../../modals/Book';
+
+import { FaMapMarkerAlt, FaCompass } from 'react-icons/fa';
 
 class Property extends Component {
     constructor() {
         super();
 
         this.state = {
-            step: 1,
-            completed: []
-        };
+            bookModal: false,
+            modeSelection: 'sites',
+            property: [],
+            bookInfo: [],
+            images: []
+        }
 
-        this.saveDraft = this.saveDraft.bind(this);
-        this.nextStep = this.nextStep.bind(this);
+        this.loadProperty = this.loadProperty.bind(this);
     }
 
-    saveDraft(data) {
-        if (this.state.step == 1) {
-            const draft = {
-                pname: data.pname,
-                image: data.image,
-                email: data.email,
-                website: data.website,
-                fax: data.fax,
-                phone: data.phone,
-                checkin: data.checkin,
-                checkout: data.checkout,
-                address: data.address,
-                country: data.country,
-                state: data.state,
-                city: data.city,
-                latitude: data.latitude,
-                longitude: data.longitude
-            };
-        }
-
-        // call to save draft
-
-        toast.success('Progress saved!')
+    async loadProperty() {
+        const id = this.props.match.params.id;
+        await axios.get("/api/v1/get-single/"+id)
+            .then(res => {
+                this.setState({
+                    property: res.data.property,
+                    bookInfo: res.data.bookInfo,
+                    images: res.data.images
+                }, function () {
+                    console.log("STATETAEET", this.state)
+                });
+            })
     }
 
-    nextStep(data) {
-        if (this.state.step == 1) {
-            const info = {
-                pname: data.pname,
-                image: data.image,
-                email: data.email,
-                website: data.website,
-                fax: data.fax,
-                phone: data.phone,
-                checkin: data.checkin,
-                checkout: data.checkout,
-                address: data.address,
-                country: data.country,
-                state: data.state,
-                city: data.city,
-                latitude: data.latitude,
-                longitude: data.longitude
-            };
-        }
-
-        if (this.state.step == 2) {
-            const taxes = data.taxes;
-        }
-
-        if (this.state.step == 4) {
-            const info = {
-                timeBefore: data.timeBefore,
-                timeBeforeType: data.timeBeforeType,
-                pets: data.pets,
-                currency: data.currency,
-                americanExpress: data.americanExpress,
-                maestro: data.currency,
-                visa: data.visa,
-                discover: data.discover,
-                euro: data.euro,
-                unionPay: data.unionPay,
-                diners: data.diners,
-                jcb: data.jcb,
-                invoiceName: data.invoiceName
-            };
-
-            /*if (
-                !info.timeBeforeType ||
-                !info.currency
-            ) {
-                toast.error('Please fill all the required tax info.');
-                return;
-            }*/
-        }
-
-        // call to save data
-
-        const completed = this.state.completed;
-
-        completed.push(this.state.step);
-
-        this.setState({
-            step: this.state.step + 1,
-            completed: completed
-        });
-
-        toast.success('Progress saved!')
+    componentDidMount() {
+        this.loadProperty();
     }
 
     render() {
         return(
-            <Content>
-                <Steps
-                    step={this.state.step}
-                    completed={this.state.completed}
+            <>
+            {this.state.bookModal &&
+                <BookModal
+                    cancel={() => this.setState({bookModal: false})}
+                    propertyID={this.state.property.id}
                 />
+            }
 
-                {this.state.step == 1 &&
-                    <PropertyInformation
-                        saveDraft={(data) => this.saveDraft(data)}
-                        nextStep={(data) => this.nextStep(data)}
-                    />
-                }
+            <PageHeader internal />
+            <Content>
+                <BackButtom />
 
-                {this.state.step == 2 &&
-                    <Taxes
-                        previous={() => this.setState({step: this.state.step - 1})}
-                        saveDraft={(data) => this.saveDraft(data)}
-                        nextStep={(data) => this.nextStep(data)}
-                    />
-                }
+                <Header>
+                    <HeaderInfo>
+                        <div>
+                            <h2>{this.state.property.title}</h2>
 
-                {this.state.step == 3 &&
-                    <Sites
-                        previous={() => this.setState({step: this.state.step - 1})}
-                        nextStep={() => this.setState({step: this.state.step + 1})}
-                    />
-                }
+                            <section>
+                                <Stars review={this.state.property.review} />
+                            </section>
+                        </div>
 
-                {this.state.step == 4 &&
-                    <Payment
-                        previous={() => this.setState({step: this.state.step - 1})}
-                        saveDraft={(data) => this.saveDraft(data)}
-                        nextStep={(data) => this.nextStep(data)}
-                    />
-                }
+                        <div>
+                            <section>
+                                <FaMapMarkerAlt />
+                                <p>{this.state.property.address}</p>
+                            </section>
+
+                            <HeaderDistance>
+                                <FaCompass />
+                                <p>2.1 miles from city</p>
+                            </HeaderDistance>
+                        </div>
+                    </HeaderInfo>
+
+                    {/*<button>Add to Trip/Leg</button>*/}
+                </Header>
+                <Info>
+                    <PropertyContent>
+                        <Pictures
+                        images={this.state.images}/>
+                        <Description
+                            description={this.state.property.description}
+                            checkIn={this.state.property.checkIn}
+                            checkOut={this.state.property.checkOut}
+                        />
+
+                        <PropertyInfoHeader>
+                            <PropertyInfoHeaderTitle onClick={() => this.setState({modeSelection: 'sites'})} selected={this.state.modeSelection == 'sites' ? true: false}>Site type</PropertyInfoHeaderTitle>
+                            <PropertyInfoHeaderTitle onClick={() => this.setState({modeSelection: 'policies'})} selected={this.state.modeSelection == 'policies' ? true: false}>Campground policies</PropertyInfoHeaderTitle>
+                        </PropertyInfoHeader>
+
+                        {this.state.modeSelection == 'sites' &&
+                            <>
+                                {this.state.property.siteTypes && this.state.property.siteTypes.map((site, index) => (
+                                    <SiteType key={index} image={this.state.images[0]} data={site} />
+                                ))}
+                            </>
+                        }
+
+                        {this.state.modeSelection == 'policies' &&
+                            <Policies data={this.state.property.policies} />
+                        }
+                    </PropertyContent>
+
+                    <Sidebar>
+                        <BookInfo
+                            book={() => this.setState({bookModal: true})}
+                            data={this.state.bookInfo}
+                        />
+                        <Map />
+                    </Sidebar>
+                </Info>
             </Content>
+            <PageFooter />
+            </>
         )
     }
 }

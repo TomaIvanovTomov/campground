@@ -20,8 +20,13 @@ class PaymentPolicyController extends Controller
        }
 
        $data['standard_rate'] = $data['standard_rate'] == true ? 1 : null;
-
-       $pp = PaymentPolicy::create($data);
+        if (!PaymentPolicy::where("property_id", $request->all()['property_id'])->first()) {
+            $pp = PaymentPolicy::create($data);
+        } else {
+            PaymentPolicy::where("property_id", $request->all()['property_id'])
+                ->update($request->all());
+            $pp = true;
+        }
 
        if ($pp) {
            return response()->json([
@@ -35,6 +40,11 @@ class PaymentPolicyController extends Controller
            ]);
        }
 
+   }
+
+   public function get($id)
+   {
+       return PaymentPolicy::where("property_id", $id)->first()->toJson();
    }
 
    public function validatePayment($data)

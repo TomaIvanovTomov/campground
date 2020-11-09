@@ -6,10 +6,10 @@ import {toast} from 'react-toastify';
 
 
 export default function RouteWrapper({
-    component: Component,
-    isPrivate,
-    ...rest
-}) {
+         component: Component,
+         isPrivate,
+         ...rest
+ }) {
     const signed = false;
 
     if (!signed && isPrivate) {

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {FaChevronDown} from 'react-icons/fa';
+import {FaChevronDown, FaSearch} from 'react-icons/fa';
 
-import {Content, Menu, User} from './styles';
+import {Link} from 'react-router-dom';
+
+import {Content, Menu, InternalMenu, Search, User} from './styles';
 
 import Logo from '../../assets/logo.png';
 import Profile from '../../assets/default.png';
@@ -33,11 +35,30 @@ class Header extends Component {
                 }
 
                 {this.props.internal &&
-                <User>
-                    <img src={Profile} />
-                    <p>{this.context.user.first_name} {this.context.user.last_name}</p>
-                    <FaChevronDown />
-                </User>
+                <>
+                    <InternalMenu>
+                        <Link to="/"><p>Home</p></Link>
+                        <Link to="/trips"><p>My Trips</p></Link>
+                        <Link to="/results"><p>Listing</p></Link>
+                    </InternalMenu>
+
+                    <Search>
+                        <FaSearch />
+                        <form method="get" action="/results">
+                            <input type="text" name="search" placeholder="Search" />
+                        </form>
+                    </Search>
+
+                    <User>
+                        <Link to="/dashboard">
+                            <img src={Profile} />
+                            <p>
+                                {this.context.user ? this.context.user.first_name : "Guest"}
+                                {this.context.user ? this.context.user.last_name : "Guest"}</p>
+                            <FaChevronDown />
+                        </Link>
+                    </User>
+                </>
                 }
             </Content>
         )

@@ -24,4 +24,9 @@ class AxiosController extends Controller
     {
         return City::select("id as value", "name as label")->where("state_id", "=", $id)->get()->toJson();
     }
+
+    public function getPlanCity($q)
+    {
+        var_dump($q);die;
+    }
 }

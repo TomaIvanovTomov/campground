@@ -38,6 +38,8 @@ class AuthController extends Controller
             $userFields->first_name = $user->first_name;
             $userFields->last_name = $user->last_name;
             $userFields->email = $user->email;
+            $userFields->phone = $user->phone;
+            $userFields->region = $user->region;
             return response()->json([
                 'user' => $userFields,
                 'message' => 'Login successful'], 200);

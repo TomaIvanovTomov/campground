@@ -30,14 +30,39 @@ class Property extends Model
     ];
 
     protected $fillable = [
-        "name", "image", "email", "website", "fax", "phone", "check_in", "check_out",
+        "policies", "sites", "name", "image", "email", "website", "fax", "phone", "check_in", "check_out",
         "address", "country", "state", "city", "zip", "lat", "long", "sales_tax_percentage",
         "sales_tax", "country_tax_percentage", "country_tax", "state_tax_percentage", "state_tax",
         "other_tax_percentage", "other_tax", "user_id", "step"
     ];
 
+    public function reviews()
+    {
+        return $this->hasMany(TripReview::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getPoliciesAttribute()
+    {
+        return $this->attributes['policies'];
+    }
+
+    public function setPoliciesAttribute($value)
+    {
+        $this->attributes['policies'] = $value;
+    }
+
+    public function getSitesAttribute()
+    {
+        return $this->attributes['sites'];
+    }
+
+    public function setSitesAttribute($value)
+    {
+        $this->attributes['sites'] = $value;
     }
 }

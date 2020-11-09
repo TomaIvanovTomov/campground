@@ -15,6 +15,11 @@ class SiteType extends Model
         return $this->belongsTo(Property::class);
     }
 
+    public function childrenSites()
+    {
+        return $this->hasMany(Site::class);
+    }
+
     public function getSitesAttribute()
     {
         return $this->attributes['sites'];

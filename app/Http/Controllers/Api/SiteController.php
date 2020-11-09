@@ -22,10 +22,11 @@ class SiteController extends Controller
 
         $error = false;
         $sites = json_decode($request->all()['sites']);
+
         foreach ($sites as $site) {
             if (!Site::create([
                 'name' => $site->name,
-                'site_id' => $request->all()['site_id']
+                'site_type_id' => $request->all()['site_type_id']
             ])) {
                 $error = true;
                 break;
@@ -35,7 +36,7 @@ class SiteController extends Controller
         if (!$error) {
             $code = 200;
             $message = "Sites created successfully.";
-            $sites = Site::where("site_id", $request->all()['site_id'])->get()->toJson();
+            $sites = Site::where("site_type_id", $request->all()['site_type_id'])->get()->toJson();
             $type = 'success';
         } else {
             $code = 422;
@@ -109,7 +110,6 @@ class SiteController extends Controller
     public function validateSite(Array $data)
     {
         return Validator::make($data, [
-            'site_id' => ['required', 'integer'],
             'count' => 'integer|between:1,5',
             'sites' => ['required']
         ]);

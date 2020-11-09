@@ -9,6 +9,9 @@
     <title>Your Website Title</title>
     <! — styles →
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz0DiCpoEtBSOCzpqmv_LNACn2GsW7EhY">
+    </script>
 </head>
 <body>
 <div id="root"></div>

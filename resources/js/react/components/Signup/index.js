@@ -49,7 +49,6 @@ class Signup extends Component {
                     password: this.state.password
                 })
                 .then(response => {
-                    console.log(response)
                     if (response.status === 200) {
                         if (response.data.user) {
                             this.context.setUser(response.data.user);
